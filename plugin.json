@@ -3,10 +3,10 @@
   "ActionKeyword":"*",
   "Name":"Currency",
   "Description":"An easy-to-use Currency Converter for Wox",
-  "Author":"SakaDream",
-  "Version":"1.1.1",
+  "Author":"SakaDream/imsh",
+  "Version":"1.2.0",
   "Language":"csharp",
-  "Website":"https://github.com/SakaDream/wox-currency-converter",
+  "Website":"https://github.com/imsh/wox-currency-converter",
   "IcoPath": "Images\\icon.png",
   "ExecuteFileName":"Currency.dll"
 }

@@ -1,26 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using HtmlCrawler;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 using Wox.Plugin;
 
 namespace Currency
 {
     class Utils
     {
-        private Crawler _crawler;
-
-        public Utils()
-        {
-            _crawler = new Crawler();
-        }
-
-        private bool CheckToCurrencyCode(string toCurrencyInput, string toCurrencyCrawled)
-        {
-            return toCurrencyInput.Equals(toCurrencyCrawled);
-        }
-
         public decimal ParseAmount(string amount)
         {
             decimal result = 0;
@@ -33,13 +22,34 @@ namespace Currency
 
         private decimal GetExchange(string fromCurrency, string toCurrency, decimal amount)
         {
-            var url = $"http://www.xe.com/currencyconverter/convert/?Amount={amount}&From={fromCurrency}&To={toCurrency}";
-            _crawler.UpdateDocument(url);
-            var resultNode = _crawler.GetElementsByClass("uccResultAmount").First();
-            var toCurrencyCodeNode = _crawler.GetElementsByClass("uccToCurrencyCode").First();
-            return (CheckToCurrencyCode(toCurrency, toCurrencyCodeNode.InnerText))
-                ? Decimal.Parse(resultNode.InnerText, new CultureInfo("en-US"))
-                : -1;
+            var url = $"https://free.currencyconverterapi.com/api/v6/convert";
+            var urlParameters = $"?q={fromCurrency}_{toCurrency}&compact=y";
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(url);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // List data response.
+                HttpResponseMessage response = client.GetAsync(urlParameters).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Parse the response body.
+                    var stringResponse = response.Content.ReadAsStringAsync().Result;
+                    JObject res = JObject.Parse(stringResponse);
+                    var result = res[$"{fromCurrency}_{toCurrency}"]["val"].Value<decimal>();
+                    Console.WriteLine("{0} ({1}) = {2}", (int)response.StatusCode, response.ReasonPhrase, result);
+
+                    return result * amount;
+                }
+                else
+                {
+                    Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+
+                    return -1;
+                }
+            }
         }
 
         public List<Result> GetResult(SearchParams sp)
@@ -54,7 +64,7 @@ namespace Currency
                 {
                     Title = $"{sp.Amount:N} {sp.FromCurrency} = {exchange:N} {sp.ToCurrency}",
                     IcoPath = "Images/icon.png",
-                    SubTitle = $"Source: http://www.xe.com/currencyconverter/"
+                    SubTitle = $"Source: https://free.currencyconverterapi.com"
                 });
             }
             else
@@ -96,73 +106,4 @@ namespace Currency
             return results;
         }
     }
-    #region Debug
-    //private string APIDebug(string fromCurrency, string toCurrency)
-    //{
-    //    string query = fromCurrency + "_" + toCurrency;
-    //    var url = $"http://free.currencyconverterapi.com/api/v3/convert?q={query}&compact=ultra";
-    //    var request = (HttpWebRequest)WebRequest.Create(url);
-    //    request.Method = "GET";
-    //    var respone = (HttpWebResponse)request.GetResponse();
-    //    using (new StreamReader(respone.GetResponseStream()))
-    //    {
-    //        var responeString = new StreamReader(respone.GetResponseStream()).ReadToEnd();
-    //        var json = JObject.Parse(responeString);
-    //        return url + ", " + json[query];
-    //    }
-    //}
-
-    //public List<Result> Debug(SearchParams sp)
-    //{
-    //    var results = new List<Result>();
-
-    //    results.Add(new Result
-    //    {
-    //        Title = $"Debug: {sp.Amount}, {sp.FromCurrency}, {sp.ToCurrency}",
-    //        IcoPath = "Images/icon.png"
-    //    });
-
-    //    return results;
-    //}
-
-    //public List<Result> Debug(string message)
-    //{
-    //    var results = new List<Result>();
-
-    //    results.Add(new Result
-    //    {
-    //        Title = $"Debug: {message}",
-    //        IcoPath = "Images/icon.png"
-    //    });
-
-    //    return results;
-    //}
-
-    //public List<Result> Debug(string message, string desc)
-    //{
-    //    var results = new List<Result>();
-
-    //    results.Add(new Result
-    //    {
-    //        Title = $"Debug: {message}",
-    //        SubTitle = $"{desc}",
-    //        IcoPath = "Images/icon.png"
-    //    });
-
-    //    return results;
-    //}
-
-    //public List<Result> DebugJson(string url, string responeString)
-    //{
-    //    var results = new List<Result>();
-
-    //    results.Add(new Result
-    //    {
-    //        Title = $"Debug: {url}, {responeString}",
-    //        IcoPath = "Images/icon.png"
-    //    });
-
-    //    return results;
-    //}
-    #endregion
 }

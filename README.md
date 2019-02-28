@@ -1,9 +1,5 @@
 # Wox Currency Converter
-An easy-to-use Currency Converter for Wox. Foreign Exchange Rate Source by [http://www.xe.com/currencyconverter/](http://www.xe.com/currencyconverter/)
-
-# Install
-
-`wpm install Currency`
+An easy-to-use Currency Converter for Wox. Foreign Exchange Rate Source by [https://free.currencyconverterapi.com](https://free.currencyconverterapi.com)
 
 ![](https://puu.sh/yJQsZ.png)
 
@@ -31,3 +27,4 @@ Convert using native speak or Google Search style
 - v1.0.1 (05/07/2017 07:50 GMT) : Auto convert based on computer's location, instead of Windows Region
 - v1.1.0 (12/20/2017 18:00 GMT) : Change Foreign Exchange Rate Source to http://www.xe.com/currencyconverter/
 - v1.1.1 (01/14/2018 17:00 GMT) : Fix decimal parsing error (Thanks [benyaminl](https://github.com/benyaminl))
+- v1.2.0 (09/02/2018 12:00 GMT) : Switched to https://free.currencyconverterapi.com instead of original one
