@@ -22,9 +22,10 @@ namespace Currency
 
         private decimal GetExchange(string fromCurrency, string toCurrency, decimal amount)
         {
+            var apiKey = GetApiKey();
             var url = $"https://free.currencyconverterapi.com/api/v6/convert";
-            var urlParameters = $"?q={fromCurrency}_{toCurrency}&compact=y";
-
+            var urlParameters = $"?q={fromCurrency}_{toCurrency}&compact=y&apiKey={apiKey}";
+      
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(url);
@@ -104,6 +105,11 @@ namespace Currency
             });
 
             return results;
+        }
+
+        private string GetApiKey()
+        {
+            return Properties.Settings.Default.apiKey;  
         }
     }
 }

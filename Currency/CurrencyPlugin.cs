@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using Wox.Plugin;
 
 namespace Currency
 {
-    class CurrencyPlugin : IPlugin
+    class CurrencyPlugin : IPlugin, ISettingProvider
     {
         private PluginInitContext _context;
         private Utils _utils;
@@ -89,6 +89,11 @@ namespace Currency
             {
                 return _utils.GetMessage("Something went wrong...", e.Message);
             }
+        }
+
+        public Control CreateSettingPanel()
+        {
+            return new SettingsControl();;
         }
     }
 }

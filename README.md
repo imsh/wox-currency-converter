@@ -28,3 +28,4 @@ Convert using native speak or Google Search style
 - v1.1.0 (12/20/2017 18:00 GMT) : Change Foreign Exchange Rate Source to http://www.xe.com/currencyconverter/
 - v1.1.1 (01/14/2018 17:00 GMT) : Fix decimal parsing error (Thanks [benyaminl](https://github.com/benyaminl))
 - v1.2.0 (09/02/2018 12:00 GMT) : Switched to https://free.currencyconverterapi.com instead of original one
+- v1.3.0 (02/28/2019 12:00 GMT) : Added support for setting apiKey - get one from https://free.currencyconverterapi.com
