@@ -1,4 +1,4 @@
-# Wox Currency Converter
+# Wox Currency Converter Plus
 An easy-to-use Currency Converter for Wox. Foreign Exchange Rate Source by [https://free.currencyconverterapi.com](https://free.currencyconverterapi.com)
 
 ![](https://puu.sh/yJQsZ.png)
