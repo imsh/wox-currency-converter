@@ -1,5 +1,8 @@
 # Wox Currency Converter Plus
-An easy-to-use Currency Converter for Wox. Foreign Exchange Rate Source by [https://free.currencyconverterapi.com](https://free.currencyconverterapi.com)
+An easy-to-use Currency Converter for Wox. Foreign Exchange Rate Source by [https://free.currencyconverterapi.com](https://free.currencyconverterapi.com)  
+
+Get prebuilt version from the plugins site: http://www.wox.one/plugin/293  
+Alternatively, install it directly in wox by running `wpm install CurrencyPlus`
 
 ![](https://puu.sh/yJQsZ.png)
 
