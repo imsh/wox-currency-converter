@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using Microsoft.PowerToys.Settings.UI.Lib;
 using Wox.Plugin;
 
 namespace Currency
@@ -11,6 +12,7 @@ namespace Currency
         private PluginInitContext _context;
         private Utils _utils;
 
+        private readonly string configuration = @"curconf\s([A-Za-z0-9]{20})"; //cur usd
         private readonly string currencyCheckPattern = @"cur\s([A-Za-z]{3})"; //cur usd
         private readonly string oneWaycheckPattern = @"^(\d+(\.\d{1,2})?)?\s([A-Za-z]{3})$"; //10 usd
         private readonly string inCheckPattern = @"(\d+(\.\d{1,2})?)?\s([A-Za-z]{3})\s([i][n])\s([A-Za-z]{3})"; // 10 usd in vnd
@@ -18,6 +20,7 @@ namespace Currency
 
         public void Init(PluginInitContext context)
         {
+            Properties.Settings.Default.Save();
             _context = context;
             _utils = new Utils();
         }
@@ -26,6 +29,17 @@ namespace Currency
         {
             try
             {
+                if (Regex.IsMatch(query.Search, configuration))
+                {
+                    if (query.RawQuery != null && query.RawQuery.Split(' ').Length == 2)
+                    {
+                        var value = query.SecondSearch;
+                        Properties.Settings.Default.apiKey = value;
+                        Properties.Settings.Default.Save();
+
+                        return _utils.GetMessage($"Saved {value} as key!");
+                    }
+                }
                 if(Regex.IsMatch(query.Search, currencyCheckPattern))
                 {
                     if(query.RawQuery != null && query.RawQuery.Split(' ').Length == 2) // cur usd
@@ -94,6 +108,11 @@ namespace Currency
         public Control CreateSettingPanel()
         {
             return new SettingsControl();;
+        }
+
+        public void UpdateSettings(PowerLauncherSettings settings)
+        {
+            //throw new NotImplementedException();
         }
     }
 }
