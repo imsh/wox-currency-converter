@@ -23,7 +23,7 @@ namespace Currency
         private decimal GetExchange(string fromCurrency, string toCurrency, decimal amount)
         {
             var apiKey = GetApiKey();
-            var url = $"https://free.currencyconverterapi.com/api/v6/convert";
+            var url = "https://free.currconv.com/api/v7/convert";
             var urlParameters = $"?q={fromCurrency}_{toCurrency}&compact=y&apiKey={apiKey}";
       
             using (var client = new HttpClient())
